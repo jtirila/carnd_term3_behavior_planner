@@ -52,7 +52,35 @@ vector<Vehicle> Vehicle::choose_next_state(map<int, vector<Vehicle>> predictions
     //TODO: Your solution here.
 
     //TODO: Change return value here:
-    return generate_trajectory("KL", predictions);
+
+    std::vector<float> costs;
+
+    float max_cost = 9999999999;
+    for(auto const& kv : successor_states()){
+        std::cout << kv << "\n";
+        float cost;
+        std::vector<Vehicle> trajectory_for_state = generate_trajectory(kv, predictions);
+        if(trajectory_for_state.size() > 0){
+            cost = calculate_cost(*this, predictions, trajectory_for_state);
+        } else {
+            cost = max_cost;
+        }
+        std::cout << "Cost: " << cost << "\n";
+        costs.push_back(cost);
+    }
+
+    int counter = 0;
+    std::vector<Vehicle> optimum_trajectory;
+
+    for(auto const& kv : successor_states()){
+        if(costs[counter] < max_cost){
+            optimum_trajectory = generate_trajectory(kv, predictions);
+            max_cost = costs[counter];
+            counter++;
+        }
+    }
+
+    return optimum_trajectory;
 }
 
 vector<string> Vehicle::successor_states() {
