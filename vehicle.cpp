@@ -53,17 +53,18 @@ vector<Vehicle> Vehicle::choose_next_state(map<int, vector<Vehicle>> predictions
 
     //TODO: Change return value here:
 
+    std::vector<string> successor_state_vec = successor_states();
     std::vector<float> costs;
 
-    float max_cost = 9999999999;
-    for(auto const& kv : successor_states()){
+    float min_cost = 9999999999;
+    for(auto const& kv : successor_state_vec){
         std::cout << kv << "\n";
         float cost;
         std::vector<Vehicle> trajectory_for_state = generate_trajectory(kv, predictions);
         if(trajectory_for_state.size() > 0){
             cost = calculate_cost(*this, predictions, trajectory_for_state);
         } else {
-            cost = max_cost;
+            cost = min_cost;
         }
         std::cout << "Cost: " << cost << "\n";
         costs.push_back(cost);
@@ -73,16 +74,16 @@ vector<Vehicle> Vehicle::choose_next_state(map<int, vector<Vehicle>> predictions
     int optimum_index = 0;
     std::vector<Vehicle> optimum_trajectory;
 
-    for(auto const& kv : successor_states()){
+    // Just a silly max finding algorithm
+    for(auto const& kv : successor_state_vec){
         float this_cost = costs[counter];
-        if(this_cost < max_cost){
-            optimum_trajectory = generate_trajectory(kv, predictions);
-            max_cost = costs[counter];
+        if(this_cost < min_cost){
+            min_cost = costs[counter];
             optimum_index = counter;
         }
         counter++;
     }
-    optimum_trajectory = generate_trajectory(successor_states()[optimum_index], predictions);
+    optimum_trajectory = generate_trajectory(successor_state_vec[optimum_index], predictions);
 
     return optimum_trajectory;
 }
