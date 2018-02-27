@@ -70,15 +70,19 @@ vector<Vehicle> Vehicle::choose_next_state(map<int, vector<Vehicle>> predictions
     }
 
     int counter = 0;
+    int optimum_index = 0;
     std::vector<Vehicle> optimum_trajectory;
 
     for(auto const& kv : successor_states()){
-        if(costs[counter] < max_cost){
+        float this_cost = costs[counter];
+        if(this_cost < max_cost){
             optimum_trajectory = generate_trajectory(kv, predictions);
             max_cost = costs[counter];
-            counter++;
+            optimum_index = counter;
         }
+        counter++;
     }
+    optimum_trajectory = generate_trajectory(successor_states()[optimum_index], predictions);
 
     return optimum_trajectory;
 }

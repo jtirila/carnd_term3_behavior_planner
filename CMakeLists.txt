@@ -17,7 +17,7 @@ link_directories(/usr/local/lib)
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
     include_directories(/usr/local/opt/openssl/include)
-    link_directories(/usr/local/opt/openssl/lib)
+    link_directories(/usr/local/opt/opens0sl/lib)
     link_directories(/usr/local/Cellar/libuv/1*/lib)
 
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
